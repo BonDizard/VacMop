@@ -1,15 +1,14 @@
 #include<Servo.h>
-#define l 2;
-#define r 3;
 Servo myservo;
 
+int  left_ir;
+int right_ir;
 char t;
 int distance = 0;
 int trig = 8;
 int echo = 9;
 int time = 0;
-int right_ir;
-int left_ir;
+
 int pos;
 
 void setup() {
@@ -71,9 +70,9 @@ void loop() {
               }
               else{
                  digitalWrite(13,LOW);
-          digitalWrite(11,LOW);
-          digitalWrite(10,LOW);
-          digitalWrite(12,LOW);
+                 digitalWrite(11,LOW);
+                 digitalWrite(10,LOW);
+                 digitalWrite(12,LOW);
               }
           }
       }
@@ -87,10 +86,10 @@ void loop() {
       t = Serial.read();
       Serial.println(t);
       if(t=='B'){
-              Bluetooth(); 
+         Bluetooth(); 
       }
       else if(t=='G'){
-        Guesture();
+        Gesture();
       }
     }
 }
@@ -117,7 +116,7 @@ void Bluetooth(){
       else if(t == 'L'){              //Left
             digitalWrite(11,HIGH);
           } 
-      else   if(t == 'Q'){            //Right
+      else   if(t == 'D'){            //Right
               digitalWrite(13,HIGH);
           }
       else if(t == 'S'){              //Break
