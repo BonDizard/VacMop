@@ -12,6 +12,7 @@ int time = 0;
 int pos;
 
 void setup() {
+
   Serial.begin(9600);
   pinMode(13,OUTPUT);  
   pinMode(12,OUTPUT);
@@ -24,12 +25,7 @@ void setup() {
 }
 
 void loop() {
-    digitalWrite(trig,HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig,LOW);
-    time = pulseIn(echo,HIGH);
-    distance = (time*0.034)/2;
-    
+      distance = getDistance();
       left_ir = digitalRead(2);
       right_ir = digitalRead(3);
 
@@ -41,32 +37,28 @@ void loop() {
           digitalWrite(12,LOW);
           delay(2000);
           while(true){
-              for(pos = 90; pos >=0; pos -= 1){
+              for(pos = 0; pos <=90; pos += 1){
                   myservo.write(pos);   
                   delay(15);                   
               } 
-               digitalWrite(trig,HIGH);
-               delayMicroseconds(10);
-               digitalWrite(trig,LOW);
-               time = pulseIn(echo,HIGH);
-               distance = (time*0.034)/2;
+              distance = getDistance();
                 
               if(!(distance<=15)){
+                delay(2000);
                 left_u();
                 break;   
               }
-              for(pos = 0; pos >= 180; pos+= 1) { 
+              delay(5000);
+              for(pos = 90; pos <= 180; pos+= 1) { 
                  myservo.write(pos);    
-                 delay(15);
+                 delay(1000);
               }
-                  digitalWrite(trig,HIGH);
-                  delayMicroseconds(10);
-                  digitalWrite(trig,LOW);
-                  time = pulseIn(echo,HIGH);
-                  distance = (time*0.034)/2;
+              distance = getDistance();
               if(!(distance<=15)){
+                delay(2000);
                 right_u();
                 break;  
+          delay(5000);
               }
               else{
                  digitalWrite(13,LOW);
@@ -89,7 +81,7 @@ void loop() {
          Bluetooth(); 
       }
       else if(t=='G'){
-        Gesture();
+        Guesture();
       }
     }
 }
@@ -128,36 +120,61 @@ void Bluetooth(){
 }
 
 void Guesture() {
-    digitalWrite(trig,HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig,LOW);
-    time = pulseIn(echo,HIGH);
-    distance = (time*0.034)/2;
-    
-    if(Serial.available()){
-      t = Serial.read();
-      Serial.println(t);
+              distance = getDistance();
+    Serial.println(distance);
       
       left_ir = digitalRead(2);
       right_ir = digitalRead(3);
       
-      if((distance > 1) && (distance < 15)){
-          myservo.attach(7); 
+      if((distance >= 5) && (distance <= 15)&&(left_ir == LOW)&&(right_ir==LOW)){
+         
           digitalWrite(13,HIGH);
           digitalWrite(11,HIGH);
-          
-          if(left_ir == LOW){
-            digitalWrite(11,HIGH);
-          }
-          else if(right_ir==LOW){
-            digitalWrite(13,HIGH);
-        }
-     }
+            delay(500);
+       digitalWrite(13,LOW);
+        digitalWrite(11,LOW);
+        digitalWrite(10,LOW);
+        digitalWrite(12,LOW);
+      }
+    else if(left_ir == HIGH && (distance >= 5) && (distance <= 15)){
+             digitalWrite(13,HIGH);
+              delay(500);
+                    digitalWrite(13,LOW);
+        digitalWrite(11,LOW);
+        digitalWrite(10,LOW);
+        digitalWrite(12,LOW);
+    }
+      else if(right_ir == HIGH&&(distance >= 5) && (distance <= 15)){
+ digitalWrite(11,HIGH);
+ delay(500);
+          digitalWrite(13,LOW);
+        digitalWrite(11,LOW);
+        digitalWrite(10,LOW);
+        digitalWrite(12,LOW);
+    }
+    else if((distance >0) && (distance < 5)){
+            digitalWrite(12,HIGH);
+            digitalWrite(10,HIGH);
+                        delay(500);
+       digitalWrite(13,LOW);
+        digitalWrite(11,LOW);
+        digitalWrite(10,LOW);
+        digitalWrite(12,LOW);
+    }
     else{
         digitalWrite(13,LOW);
         digitalWrite(11,LOW);
         digitalWrite(10,LOW);
         digitalWrite(12,LOW);
     }
-  }
+}
+
+int getDistance(){
+      digitalWrite(trig,HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig,LOW);
+    time = pulseIn(echo,HIGH);
+    distance = (time*0.034)/2;
+    Serial.println(distance);
+    return distance;
 }
