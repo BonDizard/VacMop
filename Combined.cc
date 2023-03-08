@@ -58,8 +58,8 @@ void loop() {
                 delay(2000);
                 right_u();
                 break;  
-          delay(5000);
               }
+              delay(5000);
               else{
                  digitalWrite(13,LOW);
                  digitalWrite(11,LOW);
@@ -73,7 +73,6 @@ void loop() {
             digitalWrite(11,HIGH);
       }
 
-      
       if(Serial.available()){
       t = Serial.read();
       Serial.println(t);
@@ -120,43 +119,42 @@ void Bluetooth(){
 }
 
 void Guesture() {
-              distance = getDistance();
+    distance = getDistance();
     Serial.println(distance);
       
-      left_ir = digitalRead(2);
-      right_ir = digitalRead(3);
+    left_ir = digitalRead(2);
+    right_ir = digitalRead(3);
       
-      if((distance >= 5) && (distance <= 15)&&(left_ir == LOW)&&(right_ir==LOW)){
-         
-          digitalWrite(13,HIGH);
-          digitalWrite(11,HIGH);
-            delay(500);
-       digitalWrite(13,LOW);
+    if((distance >= 5) && (distance <= 15)&&(left_ir == LOW)&&(right_ir==LOW)){ 
+        digitalWrite(13,HIGH);
+        digitalWrite(11,HIGH);
+        delay(500);
+        digitalWrite(13,LOW);
         digitalWrite(11,LOW);
         digitalWrite(10,LOW);
         digitalWrite(12,LOW);
       }
     else if(left_ir == HIGH && (distance >= 5) && (distance <= 15)){
-             digitalWrite(13,HIGH);
-              delay(500);
-                    digitalWrite(13,LOW);
+        digitalWrite(13,HIGH);
+        delay(500);
+        digitalWrite(13,LOW);
         digitalWrite(11,LOW);
         digitalWrite(10,LOW);
         digitalWrite(12,LOW);
     }
-      else if(right_ir == HIGH&&(distance >= 5) && (distance <= 15)){
- digitalWrite(11,HIGH);
- delay(500);
-          digitalWrite(13,LOW);
+    else if(right_ir == HIGH&&(distance >= 5) && (distance <= 15)){
+        digitalWrite(11,HIGH);
+        delay(500);
+        digitalWrite(13,LOW);
         digitalWrite(11,LOW);
         digitalWrite(10,LOW);
         digitalWrite(12,LOW);
     }
     else if((distance >0) && (distance < 5)){
-            digitalWrite(12,HIGH);
-            digitalWrite(10,HIGH);
-                        delay(500);
-       digitalWrite(13,LOW);
+        digitalWrite(12,HIGH);
+        digitalWrite(10,HIGH);
+        delay(500);
+        digitalWrite(13,LOW);
         digitalWrite(11,LOW);
         digitalWrite(10,LOW);
         digitalWrite(12,LOW);
@@ -170,7 +168,7 @@ void Guesture() {
 }
 
 int getDistance(){
-      digitalWrite(trig,HIGH);
+    digitalWrite(trig,HIGH);
     delayMicroseconds(10);
     digitalWrite(trig,LOW);
     time = pulseIn(echo,HIGH);
